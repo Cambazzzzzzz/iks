@@ -13,17 +13,17 @@ const PORT = process.env.PORT || 3456;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(uploadsPath));
 
-// Upload klasörünü oluştur
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
+// Upload klasörünü oluştur - yukarıda zaten var
+// if (!fs.existsSync('uploads')) {
+//     fs.mkdirSync('uploads');
+// }
 
-// Multer yapılandırması
+// Multer yapılandırması - Railway volume uyumlu
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, uploadsPath);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -45,13 +45,24 @@ const upload = multer({
     }
 });
 
-// Database path - Railway uyumlu
-const dbPath = process.env.DATABASE_PATH || './data/iks.db';
+// Database path - Railway volume için
+const VOLUME_PATH = process.env.RAILWAY_VOLUME_MOUNT_PATH || '.';
+const dbPath = process.env.DATABASE_PATH || `${VOLUME_PATH}/data/iks.db`;
 const dbDir = path.dirname(dbPath);
 
 // Database klasörünü oluştur
 if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
+}
+
+// Uploads klasörü - Railway volume için
+const uploadsPath = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+    ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/uploads`
+    : 'uploads';
+
+// Upload klasörünü oluştur
+if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
 }
 
 // Database
