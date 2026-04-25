@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İks - Sosyal Medya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login/Register Screen -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="iks-logo">İks</div>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Giriş Yap</button>
+                <button class="auth-tab" data-tab="register">Kayıt Ol</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <input type="text" id="loginUsername" placeholder="Kullanıcı adı veya email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Şifre" required>
+                </div>
+                <button type="submit" class="btn-primary">Giriş Yap</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="regUsername" placeholder="Kullanıcı adı" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regDisplayName" placeholder="Görünen ad" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" placeholder="Şifre" required>
+                </div>
+                <button type="submit" class="btn-primary">Kayıt Ol</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="iks-logo-small">İks</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-route="home">
+                    <i class="fas fa-home"></i>
+                    <span>Ana Sayfa</span>
+                </a>
+                <a href="#" class="nav-item" data-route="explore">
+                    <i class="fas fa-search"></i>
+                    <span>Keşfet</span>
+                </a>
+                <a href="#" class="nav-item" data-route="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Bildirimler</span>
+                </a>
+                <a href="#" class="nav-item" data-route="messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Mesajlar</span>
+                </a>
+                <a href="#" class="nav-item" data-route="bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Yer İşaretleri</span>
+                </a>
+                <a href="#" class="nav-item" data-route="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="#" class="nav-item" data-route="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Ayarlar</span>
+                </a>
+            </nav>
+
+            <button class="btn-iks" id="newIksBtn">
+                <i class="fas fa-plus"></i>
+                <span>Yeni İks</span>
+            </button>
+
+            <div class="sidebar-user" id="sidebarUser">
+                <img src="https://via.placeholder.com/40" alt="Profile" class="user-avatar">
+                <div class="user-info">
+                    <div class="user-name">Kullanıcı</div>
+                    <div class="user-username">@kullanici</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Page -->
+            <div id="homePage" class="page active">
+                <div class="page-header">
+                    <h1>Ana Sayfa</h1>
+                </div>
+
+                <div class="new-iks-box">
+                    <img src="https://via.placeholder.com/48" alt="Profile" class="user-avatar">
+                    <div class="new-iks-input">
+                        <textarea id="newIksText" placeholder="Ne düşünüyorsun?"></textarea>
+                        <div class="new-iks-actions">
+                            <div class="media-buttons">
+                                <label for="mediaUpload" class="media-btn">
+                                    <i class="fas fa-image"></i>
+                                </label>
+                                <input type="file" id="mediaUpload" accept="image/*,video/*" style="display: none;">
+                            </div>
+                            <button class="btn-post" id="postIksBtn">İksle</button>
+                        </div>
+                        <div id="mediaPreview" class="media-preview"></div>
+                    </div>
+                </div>
+
+                <div id="feedContainer" class="feed-container">
+                    <!-- Posts will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Explore Page -->
+            <div id="explorePage" class="page">
+                <div class="page-header">
+                    <h1>Keşfet</h1>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="İks'te ara">
+                </div>
+                <div id="searchResults" class="search-results"></div>
+                <div id="trendingContainer" class="trending-container">
+                    <h2>Trendler</h2>
+                    <div class="trend-item">
+                        <div class="trend-category">Teknoloji · Trend</div>
+                        <div class="trend-title">#YapayZeka</div>
+                        <div class="trend-count">12.5K İks</div>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-category">Spor · Trend</div>
+                        <div class="trend-title">#Futbol</div>
+                        <div class="trend-count">8.3K İks</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Page -->
+            <div id="messagesPage" class="page">
+                <div class="messages-layout">
+                    <div class="conversations-list">
+                        <div class="page-header">
+                            <h1>Mesajlar</h1>
+                        </div>
+                        <div id="conversationsList">
+                            <!-- Conversations will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="message-view">
+                        <div id="messageHeader" class="message-header" style="display: none;">
+                            <img src="https://via.placeholder.com/40" alt="Profile" class="user-avatar">
+                            <div class="user-info">
+                                <div class="user-name">Kullanıcı Seç</div>
+                            </div>
+                        </div>
+                        <div id="messagesContainer" class="messages-container">
+                            <div class="no-conversation">
+                                <i class="fas fa-envelope"></i>
+                                <p>Bir sohbet seçin</p>
+                            </div>
+                        </div>
+                        <div id="messageInput" class="message-input" style="display: none;">
+                            <input type="text" id="newMessageText" placeholder="Mesaj yaz...">
+                            <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profilePage" class="page">
+                <div class="profile-header">
+                    <div class="profile-cover"></div>
+                    <div class="profile-info">
+                        <img src="https://via.placeholder.com/120" alt="Profile" class="profile-avatar">
+                        <div class="profile-details">
+                            <h1 class="profile-name">Kullanıcı Adı</h1>
+                            <p class="profile-username">@kullanici</p>
+                            <p class="profile-bio">Bio buraya gelecek</p>
+                            <div class="profile-stats">
+                                <span><strong>0</strong> Takip Edilen</span>
+                                <span><strong>0</strong> Takipçi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="userPostsContainer" class="feed-container">
+                    <!-- User posts will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsPage" class="page">
+                <div class="page-header">
+                    <h1>Ayarlar</h1>
+                </div>
+                <div class="settings-container">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Tema</h3>
+                            <p>Görünümü özelleştir</p>
+                        </div>
+                        <div class="theme-toggle">
+                            <button class="theme-btn active" data-theme="dark">
+                                <i class="fas fa-moon"></i> Koyu
+                            </button>
+                            <button class="theme-btn" data-theme="light">
+                                <i class="fas fa-sun"></i> Açık
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Page -->
+            <div id="notificationsPage" class="page">
+                <div class="page-header">
+                    <h1>Bildirimler</h1>
+                </div>
+                <div class="notifications-container">
+                    <div class="notification-item">
+                        <i class="fas fa-heart notification-icon"></i>
+                        <div class="notification-content">
+                            <p><strong>@kullanici</strong> iksini beğendi</p>
+                            <span class="notification-time">2 saat önce</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookmarks Page -->
+            <div id="bookmarksPage" class="page">
+                <div class="page-header">
+                    <h1>Yer İşaretleri</h1>
+                </div>
+                <div id="bookmarksContainer" class="feed-container">
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <p>Henüz kaydettiğin bir iks yok</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="search-box-small">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="İks'te ara">
+            </div>
+
+            <div class="widget">
+                <h2>Senin için trendler</h2>
+                <div class="trend-item">
+                    <div class="trend-category">Teknoloji · Trend</div>
+                    <div class="trend-title">#YapayZeka</div>
+                    <div class="trend-count">12.5K İks</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-category">Gündem · Trend</div>
+                    <div class="trend-title">#Haber</div>
+                    <div class="trend-count">9.2K İks</div>
+                </div>
+            </div>
+
+            <div class="widget">
+                <h2>Kimi takip etmeli</h2>
+                <div class="user-suggestion">
+                    <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
+                    <div class="user-info">
+                        <div class="user-name">Örnek Kullanıcı</div>
+                        <div class="user-username">@ornek</div>
+                    </div>
+                    <button class="btn-follow">Takip Et</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- New Iks Modal -->
+    <div id="newIksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yeni İks</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="modalIksText" placeholder="Ne düşünüyorsun?"></textarea>
+                <div id="modalMediaPreview" class="media-preview"></div>
+            </div>
+            <div class="modal-footer">
+                <label for="modalMediaUpload" class="media-btn">
+                    <i class="fas fa-image"></i>
+                </label>
+                <input type="file" id="modalMediaUpload" accept="image/*,video/*" style="display: none;">
+                <button class="btn-post" id="modalPostBtn">İksle</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
