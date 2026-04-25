@@ -9,16 +9,31 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3456;
 
+// Database ve uploads path - Railway volume için (EN BAŞTA TANIMLA)
+const VOLUME_PATH = process.env.RAILWAY_VOLUME_MOUNT_PATH || '.';
+const dbPath = process.env.DATABASE_PATH || `${VOLUME_PATH}/data/iks.db`;
+const dbDir = path.dirname(dbPath);
+
+// Uploads klasörü - Railway volume için
+const uploadsPath = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+    ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/uploads`
+    : 'uploads';
+
+// Database klasörünü oluştur
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
+// Upload klasörünü oluştur
+if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 app.use('/uploads', express.static(uploadsPath));
-
-// Upload klasörünü oluştur - yukarıda zaten var
-// if (!fs.existsSync('uploads')) {
-//     fs.mkdirSync('uploads');
-// }
 
 // Multer yapılandırması - Railway volume uyumlu
 const storage = multer.diskStorage({
@@ -44,26 +59,6 @@ const upload = multer({
         cb(new Error('Sadece resim ve video dosyaları yüklenebilir!'));
     }
 });
-
-// Database path - Railway volume için
-const VOLUME_PATH = process.env.RAILWAY_VOLUME_MOUNT_PATH || '.';
-const dbPath = process.env.DATABASE_PATH || `${VOLUME_PATH}/data/iks.db`;
-const dbDir = path.dirname(dbPath);
-
-// Database klasörünü oluştur
-if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-}
-
-// Uploads klasörü - Railway volume için
-const uploadsPath = process.env.RAILWAY_VOLUME_MOUNT_PATH 
-    ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/uploads`
-    : 'uploads';
-
-// Upload klasörünü oluştur
-if (!fs.existsSync(uploadsPath)) {
-    fs.mkdirSync(uploadsPath, { recursive: true });
-}
 
 // Database
 const db = new sqlite3.Database(dbPath, (err) => {
